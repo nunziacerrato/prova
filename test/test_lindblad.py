@@ -128,6 +128,29 @@ class TestLindblad(unittest.TestCase):
         self.assertLess( (sum(lindbladian_output_eigvals) - 1), 1e-9,\
                                 "The trace of the output matrix of the Lindbladian must be zero")
 
+    def test_choistate_eigvals(self):
+        """ Test for the Choi-state: tests if it is a well-defined physical state, so if its
+            eigenvalues are positive and sum up to one.
+        """
+        N = 2
+        RM_D = np.array(qutip.rand_dm_ginibre((N**2-1), rank=None))
+        RM_H = tenpy.linalg.random_matrix.GUE((N,N))
+        alpha, gamma = 0.1, 0.1
+        t = 1
+
+        # Compute the matrix that represents the Lindblad superoperator in the HS base and construct
+        # the associated channel phi(t)
+        Lind_matr = Lindbladian_matrix(N,RM_D,RM_H,alpha,gamma)
+        choi_state = choi_st(N,Lind_matr,t)
+
+        eigvals_choistate = np.linalg.eigvals(choi_state)
+        
+        for eigval in eigvals_choistate:
+            self.assertGreater(eigval, 0., "The eigenvalues must be positive")
+        self.assertLess( (sum(eigvals_choistate) - 1), 1e-9, "The eigenvalues must sum up to one")
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
