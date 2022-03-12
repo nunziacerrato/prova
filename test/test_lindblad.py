@@ -8,7 +8,7 @@ from lindblad import *
 
 class TestLindblad(unittest.TestCase):
 
-    N = 2
+    # N = 2
 
     def test_dissipator_eigvals(self,N):
         """ Test for the dissipator: tests if there are N**2 eigenvalues with the following properties:
@@ -136,6 +136,6 @@ class TestLindblad(unittest.TestCase):
                                            "The eigenvalues of a state must sum up to one")
 
 
-# if __name__ == '__main__':
-#     N = 3
-#     unittest.main(N)
+if __name__ == '__main__':
+    N = 3
+    unittest.main(N)
