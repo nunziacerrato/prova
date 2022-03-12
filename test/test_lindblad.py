@@ -8,9 +8,7 @@ from lindblad import *
 
 class TestLindblad(unittest.TestCase):
 
-    # N = 2
-
-    def test_dissipator_eigvals(self,N):
+    def test_dissipator_eigvals(self):
         """ Test for the dissipator: tests if there are N**2 eigenvalues with the following properties:
             1) there always exist the null eigenvalue;
             2) all the eigenvalues have negative real part (except the null eigenvalue)
@@ -19,6 +17,7 @@ class TestLindblad(unittest.TestCase):
                             Dimension of the Hilbert space.
         """
         # Construct the Lindblad superoperator with the dissipator part only
+        N = 2
         RM_D = np.array(qutip.rand_dm_ginibre((N**2-1), rank=None))
         RM_H = np.zeros((N,N))
         alpha, gamma = 0, 1
@@ -71,7 +70,7 @@ class TestLindblad(unittest.TestCase):
         self.assertEqual(sum_eigvals, N**2,\
                         f"The dimension of the Hilbert space is {N}; the eigenvalues must be {N**2}")
     
-    def test_hamiltonianpart_eigvals(self,N):
+    def test_hamiltonianpart_eigvals(self):
         """ Test for the unitary hamiltonian contibution to the Lindbladian: tests if there are
             N**2 eigenvalues with the following properties:
             1) there always exist N null eigenvalues;
@@ -80,6 +79,7 @@ class TestLindblad(unittest.TestCase):
             Parameters: N : int
                             Dimension of the Hilbert space.
         """
+        N = 2
         # Construct the Lindblad superoperator with the hamiltonian part only
         RM_D = np.zeros((N**2 -1,N**2 -1))
         RM_H = tenpy.linalg.random_matrix.GUE((N,N))
@@ -116,11 +116,12 @@ class TestLindblad(unittest.TestCase):
             self.assertEqual(list(abs_not_zero_eigvals).count(item), 2,\
                                     "The eigenvalues should be in complex and conjugate pairs")
 
-    def test_lindbladian_superoperator_eigvals(self,N):
+    def test_lindbladian_superoperator_eigvals(self):
         """ Test for the Lindbladian superoperator: tests if such superoperator acting on a state
             gives as output a well-defined physical state. In order to do it it is verified if the
             eigenvalues of the output matrix are positive and if they sum up to one.
         """
+        N = 2
         RM_D = np.array(qutip.rand_dm_ginibre((N**2-1), rank=None))
         RM_H = tenpy.linalg.random_matrix.GUE((N,N))
         matrix = np.array(qutip.rand_dm_ginibre((N), rank=None))
@@ -137,5 +138,4 @@ class TestLindblad(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    N = 3
-    unittest.main(N)
+    unittest.main()
