@@ -138,4 +138,4 @@ class TestLindblad(unittest.TestCase):
 
 if __name__ == '__main__':
     N = 3
-    unittest.main()
+    unittest.main(N)
