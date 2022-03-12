@@ -4,7 +4,7 @@ import numpy as np
 import qutip
 import tenpy
 import unittest
-from lindblad import *
+from lindblad.lindblad import *
 
 class TestLindblad(unittest.TestCase):
 
