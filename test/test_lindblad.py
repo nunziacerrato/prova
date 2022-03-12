@@ -13,8 +13,6 @@ class TestLindblad(unittest.TestCase):
             1) there always exist the null eigenvalue;
             2) all the eigenvalues have negative real part (except the null eigenvalue)
             3) the eigenvalues are in complex and conjugate pairs.
-            Parameters: N : int
-                            Dimension of the Hilbert space.
         """
         # Construct the Lindblad superoperator with the dissipator part only
         N = 2
@@ -76,8 +74,6 @@ class TestLindblad(unittest.TestCase):
             1) there always exist N null eigenvalues;
             2) all the eigenvalues null real part
             3) the eigenvalues are in complex and conjugate pairs.
-            Parameters: N : int
-                            Dimension of the Hilbert space.
         """
         N = 2
         # Construct the Lindblad superoperator with the hamiltonian part only
@@ -118,8 +114,7 @@ class TestLindblad(unittest.TestCase):
 
     def test_lindbladian_superoperator_eigvals(self):
         """ Test for the Lindbladian superoperator: tests if such superoperator acting on a state
-            gives as output a well-defined physical state. In order to do it it is verified if the
-            eigenvalues of the output matrix are positive and if they sum up to one.
+            gives as output a matrix with trace equal to zero.
         """
         N = 2
         RM_D = np.array(qutip.rand_dm_ginibre((N**2-1), rank=None))
@@ -130,11 +125,8 @@ class TestLindblad(unittest.TestCase):
         # Compute the eigenvalues of the output matrix of the Lindbladian
         lindbladian_output_eigvals = np.linalg.eigvals(Lindbladian(N,RM_D,RM_H,matrix,alpha,gamma))
 
-        # Check if these eigenvalues are positive and sum up to one
-        for eigval in lindbladian_output_eigvals:
-            self.assertGreater(eigval, 0., "The eigenvalues of a state must be positive")
         self.assertLess( (sum(lindbladian_output_eigvals) - 1), 1e-9,\
-                                           "The eigenvalues of a state must sum up to one")
+                                "The trace of the output matrix of the Lindbladian must be zero")
 
 
 if __name__ == '__main__':
