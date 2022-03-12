@@ -128,6 +128,62 @@ class TestLindblad(unittest.TestCase):
         self.assertLess( (sum(lindbladian_output_eigvals) - 1), 1e-9,\
                                 "The trace of the output matrix of the Lindbladian must be zero")
 
+    def test_phit_eigvals(self):
+        """ Test for the CPT map Phi(t)=exp(Lt), where L is the Lindbladian matrix that represents
+            this superoperator in the HS base and t is a generic time.
+            Tests if there are N**2 eigenvalues with the following properties:
+            1) there always exist an eigenvalue equal to one;
+            2) the eigenvalues are in complex and conjugate pairs.
+            tests if such superoperator acting on a state
+        """
+        N = 2
+        RM_D = np.array(qutip.rand_dm_ginibre((N**2-1), rank=None))
+        RM_H = tenpy.linalg.random_matrix.GUE((N,N))
+        alpha, gamma = 0.1, 0.1
+        t = 1
+
+        # Compute the matrix that represents the Lindblad superoperator in the HS base and construct
+        # the associated channel phi(t)
+        Lind_matr = Lindbladian_matrix(N,RM_D,RM_H,alpha,gamma)
+        phit = phi_t(N,Lind_matr,t)
+
+        eigvals_phit = np.linalg.eigvals(phit)
+        
+        eigvals_dict = {'one':[], 'real':[], 'cc_pairs':[]}
+
+        for eigval in eigvals_phit:
+            if (1 - np.abs(np.real(eigval))) < 1e-9 and np.abs(np.imag(eigval)) < 1e-10:
+                eigvals_dict['one'].append(eigval)
+            else:
+                # assert np.real(eigval) < 1.
+                if np.abs(np.imag(eigval)) < 1e-10:
+                    eigvals_dict['real'].append(eigval)
+                else:
+                    eigvals_dict['cc_pairs'].append(eigval)
+
+        self.assertEqual(len(eigvals_dict['one']), 1,\
+                                    "There should always be one single eigenvalue equal to one")
+
+        # In order to check if the eigenvalues are in complex and conjugate pairs, construct a new
+        # list with these eigenvalues, rounded to 10 decimals and taken in absolute value, and from
+        # it construct a set, so a list of unique elements. Finally check that each element in this
+        # set appears two times in the initial list.
+        abs_ccpairs_eigvals = np.round(np.abs(eigvals_dict['cc_pairs']),10)
+        set_ccpairs_eigvals = set(abs_ccpairs_eigvals)
+
+        for item in set_ccpairs_eigvals:
+            self.assertEqual(list(abs_ccpairs_eigvals).count(item), 2, \
+                                    "The eigenvalues should be in complex and conjugate pairs")
+
+        # Check if the sum of the eigenvalues is N**2
+        sum_eigvals = 0
+        for key in eigvals_dict.keys():
+            if eigvals_dict[f'{key}']:  # implicit boolean (it is True if the list is not empty)
+                sum_eigvals += len(eigvals_dict[f'{key}'])
+        
+        self.assertEqual(sum_eigvals, N**2,\
+                    f"The dimension of the Hilbert space is {N}; the eigenvalues must be {N**2}")
+
     def test_choistate_eigvals(self):
         """ Test for the Choi-state: tests if it is a well-defined physical state, so if its
             eigenvalues are positive and sum up to one.
@@ -148,8 +204,6 @@ class TestLindblad(unittest.TestCase):
         for eigval in eigvals_choistate:
             self.assertGreater(eigval, 0., "The eigenvalues must be positive")
         self.assertLess( (sum(eigvals_choistate) - 1), 1e-9, "The eigenvalues must sum up to one")
-
-
 
 
 if __name__ == '__main__':
