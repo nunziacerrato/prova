@@ -116,7 +116,7 @@ class TestLindblad(unittest.TestCase):
             self.assertEqual(list(abs_not_zero_eigvals).count(item), 2,\
                                     "The eigenvalues should be in complex and conjugate pairs")
 
-    def test_lindbladian_superoperator_eigvals(N):
+    def test_lindbladian_superoperator_eigvals(self,N):
         """ Test for the Lindbladian superoperator: tests if such superoperator acting on a state
             gives as output a well-defined physical state. In order to do it it is verified if the
             eigenvalues of the output matrix are positive and if they sum up to one.
@@ -138,4 +138,4 @@ class TestLindblad(unittest.TestCase):
 
 if __name__ == '__main__':
     N = 3
-    unittest.main(N)
+    unittest.main()
