@@ -70,7 +70,7 @@ class TestLindblad(unittest.TestCase):
                         f"The dimension of the Hilbert space is {N}; the eigenvalues must be {N**2}")
     
     def test_hamiltonianpart_eigvals(self,N):
-        """ Test for the unitaryy hamiltonian contibution to the Lindbladian: tests if there are
+        """ Test for the unitary hamiltonian contibution to the Lindbladian: tests if there are
             N**2 eigenvalues with the following properties:
             1) there always exist N null eigenvalues;
             2) all the eigenvalues null real part
@@ -113,6 +113,25 @@ class TestLindblad(unittest.TestCase):
         for item in set_notzero_eigvals:
             self.assertEqual(list(abs_not_zero_eigvals).count(item), 2,\
                                     "The eigenvalues should be in complex and conjugate pairs")
+
+    def test_lindbladian_superoperator_eigvals(N):
+        """ Test for the Lindbladian superoperator: tests if such superoperator acting on a state
+            gives as output a well-defined physical state. In order to do it it is verified if the
+            eigenvalues of the output matrix are positive and if they sum up to one.
+        """
+        RM_D = np.array(qutip.rand_dm_ginibre((N**2-1), rank=None))
+        RM_H = tenpy.linalg.random_matrix.GUE((N,N))
+        matrix = np.array(qutip.rand_dm_ginibre((N), rank=None))
+        alpha, gamma = 1, 1
+
+        # Compute the eigenvalues of the output matrix of the Lindbladian
+        lindbladian_output_eigvals = np.linalg.eigvals(Lindbladian(N,RM_D,RM_H,matrix,alpha,gamma))
+
+        # Check if these eigenvalues are positive and sum up to one
+        for eigval in lindbladian_output_eigvals:
+            self.assertGreater(eigval, 0., "The eigenvalues of a state must be positive")
+        self.assertLess( (sum(lindbladian_output_eigvals) - 1), 1e-9,\
+                                           "The eigenvalues of a state must sum up to one")
 
 
 if __name__ == '__main__':
