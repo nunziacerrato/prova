@@ -125,8 +125,6 @@ class TestLindblad(unittest.TestCase):
         # Compute the eigenvalues of the output matrix of the Lindbladian
         lindbladian_output_eigvals = np.linalg.eigvals(Lindbladian(N,RM_D,RM_H,matrix,alpha,gamma))
 
-        self.assertLess( (sum(lindbladian_output_eigvals) - 1), 1e-9,\
-                                "The trace of the output matrix of the Lindbladian must be zero")
         self.assertAlmostEqual(sum(lindbladian_output_eigvals), 0., 9,\
                                 "The trace of the output matrix of the Lindbladian must be zero pt.2")
 
