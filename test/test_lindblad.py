@@ -127,6 +127,8 @@ class TestLindblad(unittest.TestCase):
 
         self.assertLess( (sum(lindbladian_output_eigvals) - 1), 1e-9,\
                                 "The trace of the output matrix of the Lindbladian must be zero")
+        self.assertAlmostEqual(sum(lindbladian_output_eigvals), 0., 1e-9,\
+                                "The trace of the output matrix of the Lindbladian must be zero pt.2")
 
     def test_phit_eigvals(self):
         """ Test for the CPT map Phi(t)=exp(Lt), where L is the Lindbladian matrix that represents
