@@ -4,7 +4,7 @@ import numpy as np
 import qutip
 
 def E_matr_base_can(N,i,j):
-    r''' Function that constructs a matrix of the canonical basis of matrices in dimension N,
+    fr''' Function that constructs a matrix of the canonical basis of matrices in dimension N,
         with a $1$ in position $(i, j)$.
             Parameters: 
                     $N$ : int
