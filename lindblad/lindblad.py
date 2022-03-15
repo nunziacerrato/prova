@@ -4,14 +4,14 @@ import numpy as np
 import qutip
 
 def E_matr_base_can(N,i,j):
-    ''' Function that constructs a matrix of the canonical basis of matrices in dimension N,
-        with a 1 in position (i, j).
+    r''' Function that constructs a matrix of the canonical basis of matrices in dimension N,
+        with a $1$ in position $(i, j)$.
             Parameters: 
-                    N : int
+                    $N$ : int
                         Dimension of the matrix space.
-                    i : int
+                    $i$ : int
                         Row index.
-                    j : int
+                    $j$ : int
                         Column index.
             Returns:
                 out : ndarray
