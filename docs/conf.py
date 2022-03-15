@@ -35,9 +35,6 @@ extensions = [
     'sphinx.ext.napoleon'
 ]
 
-# Configuring Napoleon.
-napoleon_google_docstring = False
-napoleon_numpy_docstring = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -56,6 +53,10 @@ autodoc_mock_imports = ['numpy','qutip','physics-tenpy']
 #
 # html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'
+
+# Configuring Napoleon.
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
